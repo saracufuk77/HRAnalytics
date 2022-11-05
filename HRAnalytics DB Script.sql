@@ -38,7 +38,12 @@ Create Table Employee.Employees
 	REFERENCES Employee.[Address] ([AddressID])
 
 Go
-Create table [Security].[Roles](	RoleID int NOT NULL Primary KEY,	RoleName Varchar(50) NOT NULL,	[Status] Tinyint NOT NULL)
+Create table [Security].[Roles]
+(
+	RoleID int NOT NULL Primary KEY,
+	RoleName Varchar(50) NOT NULL,
+	[Status] Tinyint NOT NULL
+)
 Go
 Create table [Security].[Permissions]
 (
