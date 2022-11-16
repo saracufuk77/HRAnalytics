@@ -18,12 +18,39 @@ Create Table Employee.[Address]
 	ZipCode Varchar(6) not null
 )
 Go
+Create table [Department].[Department]
+(
+	DepartmentID int NOT NULL Primary KEY,
+	Departmentname Varchar(100) NOT NULL
+)
+Go
+Create table [Department].[Position]
+(
+	PositionID int NOT NULL Primary KEY,
+	[Name] Varchar(50) NOT NULL,
+	DepartmentID int NOT NULL
+)
+	ALTER TABLE [Department].[Position]  
+	WITH CHECK ADD  CONSTRAINT [FK_Department_Position] FOREIGN KEY([DepartmentID])
+	REFERENCES [Department].[Department] ([DepartmentID])
+Go
+Create table [Department].[PositionSkillset]
+(
+	PositionSkillsetID int NOT NULL Primary KEY,
+	PositionSkillsetName Varchar(50) NOT NULL,
+	PositionID int NOT NULL,
+)
+	ALTER TABLE [Department].[PositionSkillset]
+	WITH CHECK ADD  CONSTRAINT [FK_PositionSkillset_Position] FOREIGN KEY([PositionID])
+	REFERENCES [Department].[Position] ([PositionID])
+Go
 Create Table Employee.Employees
 (
 	EmployeesID int not null Primary Key,
 	[Name] Varchar(50) not null,
 	LastName Varchar(50) not null,
 	AddressID int not null,
+	PositionID int not null,
 	Gender Varchar(2) not null,
 	Dateofbirth date not null,
 	PhoneNumber Varchar(15) not null,
@@ -37,8 +64,18 @@ Create Table Employee.Employees
 	WITH CHECK ADD  CONSTRAINT [FK_Employees_Address] FOREIGN KEY([AddressID])
 	REFERENCES Employee.[Address] ([AddressID])
 
+	ALTER TABLE Employee.Employees  
+	WITH CHECK ADD  CONSTRAINT [FK_Employees_Position] FOREIGN KEY([PositionID])
+	REFERENCES [Department].[Position] ([PositionID])
+
+
 Go
-Create table [Security].[Roles](	RoleID int NOT NULL Primary KEY,	RoleName Varchar(50) NOT NULL,	[Status] Tinyint NOT NULL)
+Create table [Security].[Roles]
+(
+	RoleID int NOT NULL Primary KEY,
+	RoleName Varchar(50) NOT NULL,
+	[Status] Tinyint NOT NULL
+)
 Go
 Create table [Security].[Permissions]
 (
@@ -101,7 +138,6 @@ Go
 Create Table Employee.TrainingHistory
 (
 	TrainingHistoryID int not null Primary Key,
-	TrainingHistoryName Varchar(50) not null,
 	TrainingID int not null,
 	EmployeesID int not null
 )
@@ -175,33 +211,3 @@ Create table [Employee].[Overtime]
 	WITH CHECK ADD CONSTRAINT [FK_Overtime_Employees] FOREIGN KEY([EmployeesID])
 	REFERENCES Employee.Employees([EmployeesID])
 Go
-Create table [Department].[Department]
-(
-	DepartmentID int NOT NULL Primary KEY,
-	Departmentname Varchar(100) NOT NULL
-)
-Go
-Create table [Department].[Position]
-(
-	PositionID int NOT NULL Primary KEY,
-	[Name] Varchar(50) NOT NULL,
-	EmployeesID int NOT NULL,
-	DepartmentID int NOT NULL
-)
-	ALTER TABLE [Department].[Position]  
-	WITH CHECK ADD  CONSTRAINT [FK_Department_Position] FOREIGN KEY([DepartmentID])
-	REFERENCES [Department].[Department] ([DepartmentID])
-
-	ALTER TABLE [Department].[Position]  
-	WITH CHECK ADD  CONSTRAINT [FK_Position_Employees] FOREIGN KEY([EmployeesID])
-	REFERENCES [Employee].[Employees] ([EmployeesID])
-Go
-Create table [Department].[PositionSkillset]
-(
-	PositionSkillsetID int NOT NULL Primary KEY,
-	PositionSkillsetName Varchar(50) NOT NULL,
-	PositionID int NOT NULL,
-)
-	ALTER TABLE [Department].[PositionSkillset]
-	WITH CHECK ADD  CONSTRAINT [FK_PositionSkillset_Position] FOREIGN KEY([PositionID])
-	REFERENCES [Department].[Position] ([PositionID])
